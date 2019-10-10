@@ -17,3 +17,4 @@ require('channels');
 
 import 'bootstrap';
 import '../stylesheets/application';
+import './nested_form';

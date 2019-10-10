@@ -30,6 +30,18 @@
   <dd><%= @contact.kind %></dd>
 
   <dt>Company:</dt>
-  <dd><%= @contact.company %></dd>
+  <dd><%= @contact.company.name %></dd>
+
+  <% if @contact.address %>
+    <dt>Address:</dt>
+    <dd><%= @contact.address.street %></dd>
+    <dd><%= @contact.address.city %></dd>
+    <dd><%= @contact.address.state %></dd>
+  <% end %>
+
+  <dt>Phones:</dt>
+  <% @contact.phones.each do |phone| %>
+    <dd><%= phone.number %></dd>
+  <% end %>
 
 </dl>

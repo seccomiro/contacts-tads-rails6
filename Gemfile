@@ -56,3 +56,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'simple_form'
 gem 'font-awesome-sass', '~> 5.11.2'
 gem 'devise'
+gem 'nested_form'

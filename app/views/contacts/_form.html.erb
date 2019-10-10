@@ -1,13 +1,42 @@
 
-<%= simple_form_for @contact do |f| %>
+<%= simple_nested_form_for @contact do |f| %>
   <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <%= f.input :name %>
-    <%= f.input :email %>
-    <%= f.input :remark %>
-    <%= f.association :kind %>
-    <%= f.association :company %>
+  <div class="form-inputs row">
+    <div class="col">
+      <fieldset>
+        <legend>Dados do Contato</legend>
+        <%= f.input :name %>
+        <%= f.input :email %>
+        <%= f.input :remark %>
+        <%= f.association :kind %>
+        <%= f.association :company %>
+      </fieldset>
+    </div>
+    <div class="col">
+      <fieldset>
+        <legend>Endereço</legend>
+        <%= f.fields_for :address do |a| %>
+          <%= a.input :street %>
+          <%= a.input :city %>
+          <%= a.input :state %>
+        <% end %>
+      </fieldset>
+      <fieldset>
+        <legend>Telefones</legend>
+        <%= f.fields_for :phones do |p| %>
+          <div class="row">
+            <div class="col-9">
+              <%= p.input :number %>
+            </div>
+            <div class="col">
+              <%= p.link_to_remove 'Remover', class: 'btn btn-danger' %>
+            </div>
+          </div>
+        <% end %>
+        <%= f.link_to_add 'Adicionar Telefone', :phones, class: 'btn btn-success btn-sm' %>
+      </fieldset>
+    </div>
   </div>
 
   <div class="form-actions">
