@@ -10,24 +10,56 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_03_153907) do
+ActiveRecord::Schema.define(version: 2019_10_10_014417) do
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "street"
+    t.string "city"
+    t.string "state"
+    t.integer "contact_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contact_id"], name: "index_addresses_on_contact_id"
+  end
+
+  create_table "companies", force: :cascade do |t|
+    t.string "name"
+    t.boolean "active"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "contacts", force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.text "remark"
     t.integer "kind_id", null: false
+    t.integer "company_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "user_id"
+    t.index ["company_id"], name: "index_contacts_on_company_id"
     t.index ["kind_id"], name: "index_contacts_on_kind_id"
-    t.index ["user_id"], name: "index_contacts_on_user_id"
+  end
+
+  create_table "contacts_users", force: :cascade do |t|
+    t.integer "contact_id", null: false
+    t.integer "user_id", null: false
+    t.index ["contact_id"], name: "index_contacts_users_on_contact_id"
+    t.index ["user_id"], name: "index_contacts_users_on_user_id"
   end
 
   create_table "kinds", force: :cascade do |t|
     t.string "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "phones", force: :cascade do |t|
+    t.string "number"
+    t.integer "contact_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contact_id"], name: "index_phones_on_contact_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -42,6 +74,10 @@ ActiveRecord::Schema.define(version: 2019_10_03_153907) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "addresses", "contacts"
+  add_foreign_key "contacts", "companies"
   add_foreign_key "contacts", "kinds"
-  add_foreign_key "contacts", "users"
+  add_foreign_key "contacts_users", "contacts"
+  add_foreign_key "contacts_users", "users"
+  add_foreign_key "phones", "contacts"
 end
