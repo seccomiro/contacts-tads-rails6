@@ -1,0 +1,32 @@
+<%= simple_form_for :search, url: search_contacts_path, method: :get do |f| %>
+  <%= f.input :term, input_html: { value: @term || '', placeholder: 'Type a partial name of a contact' } %>
+  <%= f.input :kind_id, collection: Kind.all, selected: @kind_id, include_blank: 'Select a kind or not' %>
+  <%= f.button :submit, 'Search' %>
+  <%= link_to 'Reset', search_contacts_path, class: 'btn btn-link' %>
+<% end %>
+
+<% if @contacts.any? %>
+  <div class="table-responsive mt-3">
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Kind</th>
+          <th>Company</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @contacts.each do |contact| %>
+          <tr>
+            <td><%= contact.name %></td>
+            <td><%= contact.email %></td>
+            <td><%= contact.kind %></td>
+            <td><%= contact.company %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

@@ -2,10 +2,29 @@ class ContactsController < ApplicationController
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!#, except: [:index]
 
+  def search
+    if params[:search]
+      @term = params[:search][:term]
+      @kind_id = params[:search][:kind_id]
+      # @kind = Kind.find @kind_id
+      
+      @contacts = current_user.contacts
+        .joins(:kind, :company)
+        .includes(:kind, :company)
+        .where('contacts.name like ?', "%#{@term}%")
+      @contacts = @contacts.where(kind_id: @kind_id) unless @kind_id.blank?
+      @contacts = @contacts
+        .order(:name, :kind)
+        .limit(20)
+    else
+      @contacts = Contact.none
+    end
+  end
+
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = current_user.contacts
+    @contacts = current_user.contacts.joins(:kind, :company).includes(:kind, :company)
   end
 
   # GET /contacts/1

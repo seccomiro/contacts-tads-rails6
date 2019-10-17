@@ -5,7 +5,7 @@ class CompaniesController < ApplicationController
   # GET /companies
   # GET /companies.json
   def index
-    @companies = Company.all
+    @companies = Company.all.includes(:addresses, :phones).joins(:addresses, :phones)
   end
 
   # GET /companies/1
