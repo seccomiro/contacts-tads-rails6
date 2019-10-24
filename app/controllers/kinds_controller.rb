@@ -1,16 +1,18 @@
 class KindsController < ApplicationController
   before_action :set_kind, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
 
   # GET /kinds
   # GET /kinds.json
   def index
     @kinds = Kind.all
+    # render json: { status: "success", data: { kinds: @kinds } }
   end
 
   # GET /kinds/1
   # GET /kinds/1.json
   def show
+    @fail = { id: "Não foi encontrado Tipo com ID #{params[:id]}." } unless @kind
   end
 
   # GET /kinds/new
@@ -29,7 +31,7 @@ class KindsController < ApplicationController
 
     respond_to do |format|
       if @kind.save
-        format.html { redirect_to @kind, notice: 'Kind was successfully created.' }
+        format.html { redirect_to @kind, notice: "Kind was successfully created." }
         format.json { render :show, status: :created, location: @kind }
       else
         format.html { render :new }
@@ -43,7 +45,7 @@ class KindsController < ApplicationController
   def update
     respond_to do |format|
       if @kind.update(kind_params)
-        format.html { redirect_to @kind, notice: 'Kind was successfully updated.' }
+        format.html { redirect_to @kind, notice: "Kind was successfully updated." }
         format.json { render :show, status: :ok, location: @kind }
       else
         format.html { render :edit }
@@ -57,19 +59,20 @@ class KindsController < ApplicationController
   def destroy
     @kind.destroy
     respond_to do |format|
-      format.html { redirect_to kinds_url, notice: 'Kind was successfully destroyed.' }
+      format.html { redirect_to kinds_url, notice: "Kind was successfully destroyed." }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_kind
-      @kind = Kind.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def kind_params
-      params.require(:kind).permit(:description)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_kind
+    @kind = Kind.find_by_id(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def kind_params
+    params.require(:kind).permit(:description)
+  end
 end
